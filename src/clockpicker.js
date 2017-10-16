@@ -200,6 +200,10 @@
 			}
 		} else {
 			for (i = 0; i < 24; i += options.hourstep) {
+				var isDisabled = false;
+				if (options.disabledhours && $.inArray(i, options.disabledhours) != -1) {
+					var isDisabled = true;
+				}
 				tick = tickTpl.clone();
 				radian = i / 6 * Math.PI;
 				var inner = i > 0 && i < 13;
@@ -211,9 +215,14 @@
 				if (inner) {
 					tick.css('font-size', '120%');
 				}
+				if (isDisabled) {
+					tick.addClass('disabled');
+				}
 				tick.html(i === 0 ? '00' : i);
 				hoursView.append(tick);
-				tick.on(mousedownEvent, mousedown);
+				if (!isDisabled) {
+					tick.on(mousedownEvent, mousedown);
+				}
 			}
 		}
 
@@ -422,7 +431,8 @@
 		hourstep: 1,		// allow to multi increment the hour
 		minutestep: 1,		// allow to multi increment the minute
 		ampmSubmit: false,	// allow submit with AM and PM buttons instead of the minute selection/picker
-		addonOnly: false	// only open on clicking on the input-addon
+		addonOnly: false,	// only open on clicking on the input-addon
+		disabledhours: null,	// disabled hours (only 24 hour mode)
 	};
 
 	// Show or hide popover
@@ -710,6 +720,9 @@
 			}
 			if (value === 24) {
 				value = 0;
+			}
+			if (dragging && !options.twelvehour && options.disabledhours && $.inArray(value, options.disabledhours) != -1) {
+				return;
 			}
 		} else {
 			value *= options.minutestep;

@@ -81,9 +81,13 @@
 	cursor: pointer;
 }
 .clockpicker-tick.active,
-.clockpicker-tick:hover {
+.clockpicker-tick:not(.disabled):hover {
 	background-color: rgb(192, 229, 247);
 	background-color: rgba(0, 149, 221, .25);
+}
+.clockpicker-tick.disabled {
+	color: #eee;
+	cursor: default;
 }
 .clockpicker-button {
 	background-image: none;
@@ -158,7 +162,6 @@
 	padding: 5px;
 	border: 1px solid rgba(0, 0, 0, .2);
 	border-radius: 4px;
-	
 }
 .clockpicker-button.pm-button {
 	margin: 1px 1px 1px 136px;
